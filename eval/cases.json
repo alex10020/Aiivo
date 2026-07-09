@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Coffee shop · Austin, TX",
+    "input": { "business_type": "Coffee shop", "location": "Austin, TX", "sells": "coffee, pastries" },
+    "expect": ["employer identification", "sales & use tax", "retail food", "food protection manager"],
+    "forbid": ["cook county"]
+  },
+  {
+    "name": "Coffee shop (beer & wine) · Chicago, IL",
+    "input": { "business_type": "Coffee shop", "location": "Chicago, IL", "sells": "coffee, pastries, beer & wine" },
+    "expect": ["employer identification", "sales & use tax", "retail food", "food handler", "limited business license"],
+    "forbid": ["cook county retail food", "cook county department of public health", "travis"]
+  },
+  {
+    "name": "Hair salon · Nashville, TN (no food)",
+    "input": { "business_type": "Hair salon", "location": "Nashville, TN", "sells": "cuts, color, retail products" },
+    "expect": ["employer identification", "sales & use tax", "withholding"],
+    "forbid": ["retail food", "food protection manager", "food handler"]
+  },
+  {
+    "name": "Food truck · Portland, OR (no state sales tax)",
+    "input": { "business_type": "Food truck", "location": "Portland, OR", "sells": "tacos" },
+    "expect": ["employer identification", "retail food", "food protection manager"],
+    "forbid": ["sales & use tax"]
+  },
+  {
+    "name": "Bodega · New York, NY",
+    "input": { "business_type": "Bodega", "location": "New York, NY", "sells": "groceries and deli" },
+    "expect": ["employer identification", "sales & use tax", "retail food"],
+    "forbid": []
+  },
+  {
+    "name": "Clothing boutique · Los Angeles, CA (retail, no food)",
+    "input": { "business_type": "Clothing boutique", "location": "Los Angeles, CA", "sells": "apparel and accessories" },
+    "expect": ["employer identification", "sales & use tax"],
+    "forbid": ["retail food", "food protection manager"]
+  },
+  {
+    "name": "Coffee shop · Denver, CO",
+    "input": { "business_type": "Coffee shop", "location": "Denver, CO", "sells": "coffee and pastries" },
+    "expect": ["employer identification", "sales & use tax", "retail food"],
+    "forbid": []
+  },
+  {
+    "name": "SaaS company · Austin, TX (no food/retail)",
+    "input": { "business_type": "SaaS company", "location": "Austin, TX", "sells": "software subscriptions" },
+    "expect": ["employer identification"],
+    "forbid": ["retail food", "food protection manager"]
+  }
+]

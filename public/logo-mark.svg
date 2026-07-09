@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Aiivo">
+  <defs>
+    <line id="t" x1="42.4" y1="24" x2="44.8" y2="24" stroke="#15623d" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
+  </defs>
+  <use href="#t"/>
+  <use href="#t" transform="rotate(30 24 24)"/>
+  <use href="#t" transform="rotate(60 24 24)"/>
+  <use href="#t" transform="rotate(90 24 24)"/>
+  <use href="#t" transform="rotate(120 24 24)"/>
+  <use href="#t" transform="rotate(150 24 24)"/>
+  <use href="#t" transform="rotate(180 24 24)"/>
+  <use href="#t" transform="rotate(210 24 24)"/>
+  <use href="#t" transform="rotate(240 24 24)"/>
+  <use href="#t" transform="rotate(270 24 24)"/>
+  <use href="#t" transform="rotate(300 24 24)"/>
+  <use href="#t" transform="rotate(330 24 24)"/>
+  <circle cx="24" cy="24" r="21" stroke="#15623d" stroke-width="1.6"/>
+  <circle cx="24" cy="24" r="16.6" stroke="#15623d" stroke-width="1" opacity="0.42"/>
+  <path d="M15.6 24.7l5.9 5.9L33 18.3" stroke="#15623d" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
