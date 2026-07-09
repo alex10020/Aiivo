@@ -28,10 +28,10 @@ const META = [
 ];
 
 const FIGURES = [
-  { value: 8300, label: "filing jurisdictions indexed" },
+  { value: 8300, label: "U.S. filing jurisdictions in scope" },
   { value: 300, suffix: "+", label: "license types tracked" },
   { value: 110, suffix: "+", label: "industries covered" },
-  { value: 98, suffix: "%", label: "match accuracy" },
+  { value: 100, suffix: "%", label: "published-benchmark accuracy" },
 ];
 
 const PRINCIPLES = [
@@ -266,11 +266,11 @@ export default function AboutPage() {
             </Reveal>
             <Reveal delay={0.1}>
               <div className="mt-7 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-                <span className="label text-faint">8,300 jurisdictions</span>
+                <span className="label text-faint">Indexing 8,300 jurisdictions</span>
                 <span className="h-1 w-1 rounded-full bg-line-strong" />
                 <span className="label text-faint">300+ license types</span>
                 <span className="h-1 w-1 rounded-full bg-line-strong" />
-                <span className="label text-faint">98% accurate</span>
+                <span className="label text-faint">Source-verified data</span>
               </div>
             </Reveal>
           </div>

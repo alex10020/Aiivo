@@ -1,10 +1,10 @@
 export type Confidence = "Confirmed" | "Likely Required" | "Verify";
 
 export const STATS = [
-  { value: "8,300", label: "filing jurisdictions" },
+  { value: "8,300", label: "U.S. filing jurisdictions" },
   { value: "300+", label: "license types" },
   { value: "110+", label: "industries covered" },
-  { value: "98%", label: "match accuracy" },
+  { value: "100%", label: "published-benchmark accuracy" },
 ];
 
 export const DEMO = {

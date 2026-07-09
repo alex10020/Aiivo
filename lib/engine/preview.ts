@@ -64,13 +64,43 @@ export const PREVIEW_SUMMARIES: RecordSummary[] = [
     itemCount: PREVIEW_RECORD.items.length,
     createdAt: PREVIEW_RECORD.createdAt,
   },
-  {
-    id: "preview-denver-truck",
-    summary: "Food truck — Denver, CO (tacos, aguas frescas)",
-    jurisdictionLabel: "Denver, Colorado (Denver County)",
-    status: "in_review",
-    estimatedCost: "$785–$1,185",
-    itemCount: 10,
-    createdAt: "2026-07-08T10:05:00Z",
-  },
 ];
+
+/* ----------------------------------------------------------------------------
+   In-memory record store so the FULL lookup flow works in preview mode —
+   New lookup → engine → saved record → record page — without Supabase.
+   Module-level state: survives requests within one dev-server process; a
+   restart clears it (fine for preview). `globalThis` guard survives HMR.
+---------------------------------------------------------------------------- */
+type MemStore = Map<string, ComplianceRecord>;
+const g = globalThis as unknown as { __aiivoPreviewStore?: MemStore };
+const mem: MemStore = (g.__aiivoPreviewStore ??= new Map());
+
+export function previewPutRecord(
+  record: Omit<ComplianceRecord, "id">
+): string {
+  const id = `pv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+  const items = record.items.map((it) => ({ ...it, recordId: id }));
+  mem.set(id, { ...record, id, items });
+  return id;
+}
+
+export function previewGetRecord(id: string): ComplianceRecord | null {
+  if (id === PREVIEW_RECORD.id) return PREVIEW_RECORD;
+  return mem.get(id) ?? null;
+}
+
+export function previewSummaries(): RecordSummary[] {
+  const created = [...mem.values()]
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+    .map((r) => ({
+      id: r.id,
+      summary: r.summary,
+      jurisdictionLabel: r.jurisdictionLabel,
+      status: r.status,
+      estimatedCost: r.estimatedCost,
+      itemCount: r.items.length,
+      createdAt: r.createdAt,
+    }));
+  return [...created, ...PREVIEW_SUMMARIES];
+}

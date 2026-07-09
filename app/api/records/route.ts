@@ -1,14 +1,17 @@
-/* Authed record creation: run the grounded lookup, persist under the owner. */
+/* Authed record creation: run the grounded lookup, persist under the owner.
+   In dev preview mode (no Supabase configured) the flow still works end to
+   end — records persist to the in-memory preview store instead. */
 import { requireUser } from "@/lib/engine/auth";
 import { runLookup } from "@/lib/engine/interpret/orchestrate";
 import { hasStore, persistRecord } from "@/lib/engine/store";
+import { previewEnabled, previewPutRecord } from "@/lib/engine/preview";
 import { clientKey, rateLimit } from "@/lib/engine/ratelimit";
 import { toHttp, UpstreamError, ValidationError } from "@/lib/engine/errors";
 import type { CreateRecordRequest } from "@/lib/engine/contracts";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(req: Request) {
   const rl = rateLimit(`records:${clientKey(req)}`, 15);

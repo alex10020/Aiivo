@@ -18,7 +18,7 @@ const LAYERS = [
   {
     icon: ShieldCheck,
     title: "E&O insurance",
-    body: "Technology Errors & Omissions cover in place from day one.",
+    body: "Filing services launch backed by Technology Errors & Omissions cover.",
   },
   {
     icon: Gauge,

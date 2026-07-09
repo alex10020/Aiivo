@@ -71,7 +71,7 @@ const SECTIONS: Section[] = [
     label: "Sourcing",
     title: "Where our data comes from",
     body: [
-      "Every requirement we surface is drawn from official government sources — agency publications, statutes, municipal codes and licensing portals — across 8,300 jurisdictions and 300+ license types. That data is scraped, validated and timestamped before it enters our index.",
+      "Every requirement we surface is drawn from official government sources — agency publications, statutes, municipal codes and licensing portals. That data is scraped, validated and timestamped before it enters our index, which we are building toward all 8,300 U.S. filing jurisdictions; today it runs deepest across 17 states, with federal and state coverage everywhere.",
       "We do not generate requirements with a language model. The AI reads your business description and matches it against this structured, real-world dataset; it selects from permits that already exist on the record. It never invents one.",
     ],
   },
@@ -99,16 +99,16 @@ const SECTIONS: Section[] = [
     title: "Human review and filing checks",
     body: [
       "Anything scored below 90% confidence is routed to a human reviewer before it reaches you. For File-For-Me, the bar is higher still: every report is verified by a compliance reviewer before a single application is submitted on your behalf.",
-      "Filing work is also backed by errors-and-omissions insurance — accountability, not just a disclaimer.",
+      "Filing services will launch backed by errors-and-omissions insurance — accountability, not just a disclaimer.",
     ],
   },
   {
     n: "06",
     label: "Benchmark",
-    title: "What “98% accurate” means",
+    title: "What our accuracy number means",
     body: [
-      "Across a representative benchmark of business types and jurisdictions, the permits Aiivo returns match what the issuing authority actually requires about 98% of the time. It is a measured rate of performance — not a guarantee for any single business.",
-      "The remaining edge cases are precisely why confidence tags, “last verified” dates and source links exist on every report: so the rare miss is visible and checkable, never hidden.",
+      "We measure accuracy against a published benchmark: a versioned set of test businesses across our covered states, each checked for the permits the issuing authority actually requires — including trap cases like Oregon's missing sales tax or Chicago's city-run health department. On the current benchmark, Aiivo scores 100% with zero wrong-jurisdiction errors. The benchmark grows with our coverage, and it is a measured rate of performance — not a guarantee for any single business.",
+      "Edge cases are precisely why confidence tags, “last verified” dates and source links exist on every report: so any miss is visible and checkable, never hidden.",
     ],
   },
   {

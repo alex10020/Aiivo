@@ -6,7 +6,9 @@ import { Check } from "lucide-react";
 import { Seal } from "@/components/ui/Seal";
 
 const ease = [0.16, 1, 0.3, 1] as const;
-const TARGET = 8300;
+/* Real count of sourced requirements in the index — keep in sync with the
+   seed (lib/engine/data/seed.ts); the eval prints the current number. */
+const TARGET = 167;
 
 const STEPS = [
   "Identifying your jurisdiction",
@@ -97,7 +99,7 @@ export function LoadingSequence() {
           <div className="flex items-start justify-between gap-6">
             {/* big counter */}
             <div>
-              <p className="label">Scanning jurisdictions</p>
+              <p className="label">Checking sourced requirements</p>
               <div className="mt-3 flex items-baseline gap-2">
                 <span className="font-mono text-5xl tracking-tight text-ink tabular-nums sm:text-6xl">
                   {count.toLocaleString()}

@@ -37,9 +37,9 @@ export function Demo() {
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
-                Type your business and city. Aiivo scans 8,300 jurisdictions in
-                real time and stamps out every permit you need — costs, timelines
-                and filing links included.
+                Type your business and city. Aiivo checks every level of
+                government — federal, state, county and city — and stamps out
+                every permit you need, with costs, timelines and filing links.
               </p>
 
               <div className="mt-8 flex justify-center">
@@ -67,11 +67,11 @@ export function Demo() {
               </div>
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-line pt-6">
-                <span className="label text-faint">8,300 jurisdictions</span>
+                <span className="label text-faint">Federal · state · county · city</span>
                 <span className="h-1 w-1 rounded-full bg-line-strong" />
                 <span className="label text-faint">300+ license types</span>
                 <span className="h-1 w-1 rounded-full bg-line-strong" />
-                <span className="label text-faint">98% accurate</span>
+                <span className="label text-faint">Source-verified data</span>
               </div>
             </div>
           </div>

@@ -28,7 +28,8 @@ export function Pipeline() {
               Four stamped layers turn fragmented government sources into a record
               you can file against. The model never invents a permit — it matches
               your business to data we&apos;ve already scraped, validated and
-              timestamped. The gap between 60% and 98% accuracy is the gap between{" "}
+              timestamped. The gap between a raw model&apos;s guess and a
+              source-verified answer is the gap between{" "}
               <span className="text-stamp">a $5,000 fine</span> and full
               compliance.
             </p>

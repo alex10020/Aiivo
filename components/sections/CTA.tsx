@@ -84,9 +84,9 @@ export function CTA() {
             <p className="mt-6 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
               No account needed
               <span className="mx-2 inline-block h-1 w-1 -translate-y-0.5 rounded-full bg-line-strong align-middle" />
-              8,300 jurisdictions indexed
+              Indexing 8,300 jurisdictions
               <span className="mx-2 inline-block h-1 w-1 -translate-y-0.5 rounded-full bg-line-strong align-middle" />
-              98% accurate
+              Source-verified data
             </p>
           </div>
         </motion.div>

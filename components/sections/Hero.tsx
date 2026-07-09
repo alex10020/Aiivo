@@ -104,11 +104,11 @@ export function Hero() {
             transition={{ duration: 1, ease, delay: 0.45 }}
             className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2"
           >
-            <span className="label text-faint">8,300 jurisdictions</span>
+            <span className="label text-faint">Indexing 8,300 jurisdictions</span>
             <span className="h-1 w-1 rounded-full bg-line-strong" />
             <span className="label text-faint">300+ license types</span>
             <span className="h-1 w-1 rounded-full bg-line-strong" />
-            <span className="label text-faint">98% accurate</span>
+            <span className="label text-faint">Source-verified data</span>
           </motion.div>
         </div>
 
@@ -153,13 +153,13 @@ export function Hero() {
               <div className="mt-6">
                 <div className="flex items-center justify-between">
                   <span className="label">
-                    Scanned{" "}
+                    Checked{" "}
                     <CountUp
-                      value={8300}
+                      value={167}
                       className="text-ink-soft"
                       duration={1.4}
                     />{" "}
-                    jurisdictions
+                    sourced requirements
                   </span>
                   <span className="font-mono text-xs font-medium text-seal">
                     7 matches
