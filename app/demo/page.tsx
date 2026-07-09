@@ -28,6 +28,7 @@ import {
 import { LoadingSequence } from "@/components/demo/LoadingSequence";
 import { ResultsSummary } from "@/components/demo/ResultsSummary";
 import { PermitCard } from "@/components/demo/PermitCard";
+import { ReportDisclaimer } from "@/components/ui/ReportDisclaimer";
 import { ClarifyStep } from "@/components/demo/ClarifyStep";
 
 type Status =
@@ -451,6 +452,9 @@ export default function DemoPage() {
                     </ul>
                   </div>
                 )}
+
+                {/* legal boundary — rendered with the report, not just a footer link */}
+                <ReportDisclaimer />
 
                 {/* conversion CTA */}
                 <div className="sheet perforated-top relative overflow-hidden rounded-2xl">

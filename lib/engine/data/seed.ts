@@ -58,6 +58,11 @@ interface CityCfg {
   clerk: Agency;
   fees: { food: string; co: string; sign: string; dba: string; bizLicense?: string; foodHandler?: string };
   extras?: { bizLicense?: boolean; foodHandler?: boolean };
+  /* Where retail-food licensing actually sits for this city:
+     "city" (default — city health dept), "county" (county health district,
+     e.g. Seattle/King Co., Phoenix/Maricopa), or "state" (state agency
+     licenses restaurants directly, e.g. Florida DBPR). */
+  foodLevel?: "city" | "county" | "state";
 }
 interface StateCfg {
   code: string;
@@ -69,6 +74,11 @@ interface StateCfg {
   wc: Agency;
   health: Agency;
   foodMgrFee: string;
+  /* State-level restaurant licensing agency + fee (used when a city sets
+     foodLevel: "state" — e.g. Florida DBPR). */
+  stateFood?: { agency: Agency; fee: string };
+  /* States with a general STATE business license (e.g. Nevada, Washington). */
+  stateBizLicense?: { agency: Agency; fee: string };
   cities: CityCfg[];
 }
 
@@ -183,6 +193,171 @@ const STATES: StateCfg[] = [
       extras: { bizLicense: true },
     }],
   },
+  {
+    code: "FL", name: "Florida", url: "https://www.myflorida.com",
+    revenue: ["Florida Dept. of Revenue", "https://floridarevenue.com/taxes/registration/"],
+    labor: ["Florida Dept. of Commerce (Reemployment Tax)", "https://floridarevenue.com/taxes/taxesfees/Pages/reemployment.aspx"],
+    wc: ["Florida Div. of Workers' Compensation", "https://myfloridacfo.com/division/wc/"],
+    health: ["Florida DBPR", "https://www2.myfloridalicense.com/hotels-restaurants/"], foodMgrFee: "$100–$160",
+    stateFood: { agency: ["Florida DBPR, Div. of Hotels & Restaurants", "https://www2.myfloridalicense.com/hotels-restaurants/"], fee: "$347–$457" },
+    cities: [{
+      name: "Miami", placeFips: "1245000", countyName: "Miami-Dade County", countyFips: "12086",
+      health: ["Florida DBPR (state-licensed)", "https://www2.myfloridalicense.com/hotels-restaurants/"],
+      buildings: ["Miami Building Dept.", "https://www.miami.gov/Services/Building-Permitting"],
+      business: ["City of Miami (Business Tax Receipt)", "https://www.miami.gov/Services/Business-Licensing"],
+      clerk: ["Miami-Dade County Clerk", "https://www.miamidadeclerk.gov/"],
+      fees: { food: "$347–$457", co: "$150–$500", sign: "$150–$500", dba: "$50", bizLicense: "$45–$500" },
+      extras: { bizLicense: true },
+      foodLevel: "state",
+    }],
+  },
+  {
+    code: "WA", name: "Washington", url: "https://www.wa.gov", noSalesTax: false,
+    revenue: ["Washington Dept. of Revenue", "https://dor.wa.gov/open-business"],
+    labor: ["Washington Employment Security Dept.", "https://esd.wa.gov/employer-taxes"],
+    wc: ["Washington Dept. of Labor & Industries", "https://lni.wa.gov/insurance/"],
+    health: ["Washington State Dept. of Health", "https://doh.wa.gov/"], foodMgrFee: "$10–$40",
+    stateBizLicense: { agency: ["Washington Dept. of Revenue (Business Licensing Service)", "https://dor.wa.gov/open-business/apply-business-license"], fee: "$90" },
+    cities: [{
+      name: "Seattle", placeFips: "5363000", countyName: "King County", countyFips: "53033",
+      health: ["Public Health — Seattle & King County", "https://kingcounty.gov/en/dept/dph/health-safety/food-safety"],
+      buildings: ["Seattle Dept. of Construction & Inspections", "https://www.seattle.gov/sdci"],
+      business: ["City of Seattle (Business License Tax Certificate)", "https://www.seattle.gov/license-and-tax-administration"],
+      clerk: ["King County Recorder", "https://kingcounty.gov/en/dept/executive-services/certificates-permits-licenses/recorders-office"],
+      fees: { food: "$400–$1,100", co: "$200–$500", sign: "$150–$500", dba: "$5", bizLicense: "$61+ (revenue-based)" },
+      extras: { bizLicense: true },
+      foodLevel: "county",
+    }],
+  },
+  {
+    code: "GA", name: "Georgia", url: "https://georgia.gov",
+    revenue: ["Georgia Dept. of Revenue", "https://dor.georgia.gov/register-new-business"],
+    labor: ["Georgia Dept. of Labor", "https://dol.georgia.gov/"],
+    wc: ["Georgia State Board of Workers' Compensation", "https://sbwc.georgia.gov/"],
+    health: ["Georgia Dept. of Public Health", "https://dph.georgia.gov/environmental-health/food-service"], foodMgrFee: "$100–$160",
+    cities: [{
+      name: "Atlanta", placeFips: "1304000", countyName: "Fulton County", countyFips: "13121",
+      health: ["Fulton County Board of Health", "https://fultoncountyga.gov/services/health-services/environmental-health"],
+      buildings: ["Atlanta Office of Buildings", "https://www.atlantaga.gov/government/departments/city-planning/office-of-buildings"],
+      business: ["City of Atlanta (Occupation Tax / Business License)", "https://www.atlantaga.gov/government/departments/finance/business-licensing"],
+      clerk: ["Fulton County Clerk of Superior Court", "https://fultonclerk.org/"],
+      fees: { food: "$300–$700", co: "$150–$500", sign: "$150–$500", dba: "$171", bizLicense: "$75+ (revenue-based)" },
+      extras: { bizLicense: true },
+      foodLevel: "county",
+    }],
+  },
+  {
+    code: "AZ", name: "Arizona", url: "https://az.gov",
+    revenue: ["Arizona Dept. of Revenue (TPT)", "https://azdor.gov/transaction-privilege-tax/tpt-license"],
+    labor: ["Arizona Dept. of Economic Security", "https://des.az.gov/services/employment/unemployment-employer"],
+    wc: ["Industrial Commission of Arizona", "https://www.azica.gov/divisions/workers-compensation"],
+    health: ["Arizona Dept. of Health Services", "https://www.azdhs.gov/"], foodMgrFee: "$50–$150",
+    cities: [{
+      name: "Phoenix", placeFips: "0455000", countyName: "Maricopa County", countyFips: "04013",
+      health: ["Maricopa County Environmental Services", "https://www.maricopa.gov/1911/Environmental-Services"],
+      buildings: ["Phoenix Planning & Development", "https://www.phoenix.gov/pdd"],
+      business: ["City of Phoenix", "https://www.phoenix.gov/"],
+      clerk: ["Maricopa County Recorder", "https://recorder.maricopa.gov/"],
+      fees: { food: "$300–$1,000", co: "$150–$500", sign: "$150–$400", dba: "$10", bizLicense: "$12+ (TPT per location)" },
+      foodLevel: "county",
+    }],
+  },
+  {
+    code: "MA", name: "Massachusetts", url: "https://www.mass.gov",
+    revenue: ["Massachusetts Dept. of Revenue (MassTaxConnect)", "https://www.mass.gov/how-to/register-your-business-with-masstaxconnect"],
+    labor: ["Massachusetts Dept. of Unemployment Assistance", "https://www.mass.gov/orgs/department-of-unemployment-assistance"],
+    wc: ["Massachusetts Dept. of Industrial Accidents", "https://www.mass.gov/orgs/department-of-industrial-accidents"],
+    health: ["Massachusetts Dept. of Public Health", "https://www.mass.gov/orgs/department-of-public-health"], foodMgrFee: "$100–$160",
+    cities: [{
+      name: "Boston", placeFips: "2507000", countyName: "Suffolk County", countyFips: "25025",
+      health: ["Boston Inspectional Services (Health Division)", "https://www.boston.gov/departments/inspectional-services"],
+      buildings: ["Boston Inspectional Services", "https://www.boston.gov/departments/inspectional-services"],
+      business: ["City of Boston", "https://www.boston.gov/"],
+      clerk: ["Boston City Clerk", "https://www.boston.gov/departments/city-clerk"],
+      fees: { food: "$100–$500", co: "$50–$300", sign: "$100–$400", dba: "$65" },
+    }],
+  },
+  {
+    code: "PA", name: "Pennsylvania", url: "https://www.pa.gov",
+    revenue: ["Pennsylvania Dept. of Revenue", "https://www.pa.gov/agencies/revenue/"],
+    labor: ["Pennsylvania Dept. of Labor & Industry", "https://www.pa.gov/agencies/dli/"],
+    wc: ["Pennsylvania Bureau of Workers' Compensation", "https://www.pa.gov/agencies/dli/programs-services/workers-compensation.html"],
+    health: ["Pennsylvania Dept. of Agriculture (Food Safety)", "https://www.pa.gov/agencies/pda/"], foodMgrFee: "$100–$180",
+    cities: [{
+      name: "Philadelphia", placeFips: "4260000", countyName: "Philadelphia County", countyFips: "42101",
+      health: ["Philadelphia Dept. of Public Health", "https://www.phila.gov/departments/department-of-public-health/"],
+      buildings: ["Philadelphia Dept. of Licenses & Inspections", "https://www.phila.gov/departments/department-of-licenses-and-inspections/"],
+      business: ["Philadelphia Dept. of Licenses & Inspections (Commercial Activity License)", "https://www.phila.gov/services/permits-violations-licenses/get-a-license/business-licenses/"],
+      clerk: ["Philadelphia Dept. of Records", "https://www.phila.gov/departments/department-of-records/"],
+      fees: { food: "$150–$300", co: "$100–$400", sign: "$100–$400", dba: "$70", bizLicense: "$0" },
+      extras: { bizLicense: true },
+    }],
+  },
+  {
+    code: "MI", name: "Michigan", url: "https://www.michigan.gov",
+    revenue: ["Michigan Dept. of Treasury", "https://www.michigan.gov/taxes/business-taxes/sales-use-tax"],
+    labor: ["Michigan Unemployment Insurance Agency", "https://www.michigan.gov/leo/bureaus-agencies/uia"],
+    wc: ["Michigan Workers' Disability Compensation Agency", "https://www.michigan.gov/leo/bureaus-agencies/wdca"],
+    health: ["Michigan Dept. of Agriculture & Rural Development", "https://www.michigan.gov/mdard/food-dairy"], foodMgrFee: "$100–$180",
+    cities: [{
+      name: "Detroit", placeFips: "2622000", countyName: "Wayne County", countyFips: "26163",
+      health: ["Detroit Health Dept.", "https://detroitmi.gov/departments/detroit-health-department"],
+      buildings: ["Detroit Buildings, Safety Engineering & Environmental Dept.", "https://detroitmi.gov/departments/buildings-safety-engineering-and-environmental-department"],
+      business: ["City of Detroit (Business Licensing)", "https://detroitmi.gov/how-do-i/get-business-license"],
+      clerk: ["Wayne County Clerk", "https://www.waynecounty.com/elected/clerk/"],
+      fees: { food: "$400–$600", co: "$150–$500", sign: "$100–$400", dba: "$10–$25", bizLicense: "$75–$300" },
+      extras: { bizLicense: true },
+    }],
+  },
+  {
+    code: "NC", name: "North Carolina", url: "https://www.nc.gov",
+    revenue: ["North Carolina Dept. of Revenue", "https://www.ncdor.gov/taxes-forms/sales-and-use-tax"],
+    labor: ["North Carolina Div. of Employment Security", "https://des.nc.gov/"],
+    wc: ["North Carolina Industrial Commission", "https://www.ic.nc.gov/"],
+    health: ["North Carolina DHHS (Food Protection)", "https://www.ncdhhs.gov/divisions/public-health"], foodMgrFee: "$100–$160",
+    cities: [{
+      name: "Charlotte", placeFips: "3712000", countyName: "Mecklenburg County", countyFips: "37119",
+      health: ["Mecklenburg County Public Health", "https://www.mecknc.gov/HealthDepartment"],
+      buildings: ["Charlotte-Mecklenburg Code Enforcement", "https://www.mecknc.gov/CodeEnforcement"],
+      business: ["City of Charlotte", "https://www.charlottenc.gov/"],
+      clerk: ["Mecklenburg County Register of Deeds", "https://www.mecknc.gov/ROD"],
+      fees: { food: "$0 (no state fee)", co: "$100–$400", sign: "$100–$400", dba: "$26" },
+      foodLevel: "county",
+    }],
+  },
+  {
+    code: "NV", name: "Nevada", url: "https://nv.gov",
+    revenue: ["Nevada Dept. of Taxation", "https://tax.nv.gov/"],
+    labor: ["Nevada Dept. of Employment, Training & Rehabilitation", "https://detr.nv.gov/"],
+    wc: ["Nevada Div. of Industrial Relations", "https://dir.nv.gov/WCS/Home/"],
+    health: ["Nevada Div. of Public & Behavioral Health", "https://dpbh.nv.gov/"], foodMgrFee: "$0–$100",
+    stateBizLicense: { agency: ["Nevada Secretary of State (State Business License)", "https://www.nvsos.gov/sos/businesses/start-a-business/state-business-license"], fee: "$200" },
+    cities: [{
+      name: "Las Vegas", placeFips: "3240000", countyName: "Clark County", countyFips: "32003",
+      health: ["Southern Nevada Health District", "https://www.southernnevadahealthdistrict.org/permits-and-regulations/"],
+      buildings: ["Las Vegas Building & Safety", "https://www.lasvegasnevada.gov/Business/Building-Safety"],
+      business: ["City of Las Vegas (Business Licensing)", "https://www.lasvegasnevada.gov/Business/Business-Licenses"],
+      clerk: ["Clark County Clerk", "https://www.clarkcountynv.gov/government/elected_officials/county_clerk/"],
+      fees: { food: "$300–$1,000", co: "$150–$500", sign: "$150–$500", dba: "$25", bizLicense: "$150–$500" },
+      extras: { bizLicense: true },
+      foodLevel: "county",
+    }],
+  },
+  {
+    code: "OH", name: "Ohio", url: "https://ohio.gov",
+    revenue: ["Ohio Dept. of Taxation (Vendor's License)", "https://tax.ohio.gov/business/ohio-business-taxes/sales-and-use/registration"],
+    labor: ["Ohio Dept. of Job & Family Services", "https://jfs.ohio.gov/"],
+    wc: ["Ohio Bureau of Workers' Compensation", "https://www.bwc.ohio.gov/"],
+    health: ["Ohio Dept. of Health", "https://odh.ohio.gov/"], foodMgrFee: "$100–$160",
+    cities: [{
+      name: "Columbus", placeFips: "3918000", countyName: "Franklin County", countyFips: "39049",
+      health: ["Columbus Public Health", "https://www.columbus.gov/publichealth/"],
+      buildings: ["Columbus Dept. of Building & Zoning Services", "https://www.columbus.gov/bzs/"],
+      business: ["City of Columbus", "https://www.columbus.gov/"],
+      clerk: ["Franklin County Clerk of Courts", "https://clerk.franklincountyohio.gov/"],
+      fees: { food: "$100–$500", co: "$100–$400", sign: "$100–$400", dba: "$39" },
+    }],
+  },
 ];
 
 /* ----------------------------- generation --------------------------------- */
@@ -222,6 +397,21 @@ for (const st of STATES) {
     req(`req-${sid}-foodmgr`, "food-manager", sid, { triggers: ["food"] }, st.foodMgrFee, "1–2 weeks", "5 years", st.health[1], "confirmed", `src-${sid}-hlth`)
   );
 
+  // State-level restaurant licensing (e.g. Florida DBPR)
+  if (st.stateFood) {
+    SRC.push(src(`src-${sid}-food`, sid, st.stateFood.agency));
+    REQ.push(
+      req(`req-${sid}-food`, "retail-food", sid, { triggers: ["food"] }, st.stateFood.fee, "2–6 weeks", "Annual", st.stateFood.agency[1], "confirmed", `src-${sid}-food`)
+    );
+  }
+  // General state business license (e.g. Nevada, Washington)
+  if (st.stateBizLicense) {
+    SRC.push(src(`src-${sid}-biz`, sid, st.stateBizLicense.agency));
+    REQ.push(
+      req(`req-${sid}-biz`, "biz-license", sid, {}, st.stateBizLicense.fee, "1–2 weeks", "Annual", st.stateBizLicense.agency[1], "confirmed", `src-${sid}-biz`)
+    );
+  }
+
   for (const c of st.cities) {
     const cid = `${sid}-${slug(c.name)}`;
     const coid = `${sid}-${c.countyFips}`;
@@ -234,8 +424,20 @@ for (const st of STATES) {
     JUR.push(jur(cid, "city", c.name, coid, st.code, c.countyFips, c.placeFips, c.business[1]));
     SRC.push(src(`src-${cid}-hlth`, cid, c.health), src(`src-${cid}-bld`, cid, c.buildings), src(`src-${cid}-biz`, cid, c.business));
 
+    // Retail-food licensing sits at the level that actually issues it here.
+    const foodLevel = c.foodLevel ?? "city";
+    if (foodLevel === "city") {
+      REQ.push(
+        req(`req-${cid}-food`, "retail-food", cid, { triggers: ["food"] }, c.fees.food, "2–8 weeks", "Annual", c.health[1], "confirmed", `src-${cid}-hlth`)
+      );
+    } else if (foodLevel === "county") {
+      // county health district licenses food for this city (health agency IS the county's)
+      REQ.push(
+        req(`req-${cid}-food`, "retail-food", coid, { triggers: ["food"] }, c.fees.food, "2–8 weeks", "Annual", c.health[1], "confirmed", `src-${cid}-hlth`)
+      );
+    } // "state": handled once by st.stateFood above — no city/county duplicate
+
     REQ.push(
-      req(`req-${cid}-food`, "retail-food", cid, { triggers: ["food"] }, c.fees.food, "2–8 weeks", "Annual", c.health[1], "confirmed", `src-${cid}-hlth`),
       req(`req-${cid}-co`, "cert-occ", cid, {}, c.fees.co, "2–6 weeks", "One-time", c.buildings[1], "likely_required", `src-${cid}-bld`),
       req(`req-${cid}-sign`, "sign", cid, { triggers: ["signage"] }, c.fees.sign, "2–4 weeks", "One-time", c.buildings[1], "likely_required", `src-${cid}-bld`)
     );

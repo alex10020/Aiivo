@@ -4,6 +4,8 @@ import { ArrowRight, FilePlus2, FileText } from "lucide-react";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { currentUser } from "@/lib/engine/session";
 import { listRecordsForOwner } from "@/lib/engine/store";
+import { previewEnabled, PREVIEW_SUMMARIES } from "@/lib/engine/preview";
+import { PreviewBanner } from "@/components/app/PreviewBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +27,13 @@ function fmtDate(iso: string): string {
 
 export default async function DashboardPage() {
   const user = await currentUser();
-  if (!user) redirect("/signin?next=/app");
-  const records = await listRecordsForOwner(user.id);
+  const preview = !user && previewEnabled();
+  if (!user && !preview) redirect("/signin?next=/app");
+  const records = preview ? PREVIEW_SUMMARIES : await listRecordsForOwner(user!.id);
 
   return (
     <div className="mx-auto max-w-4xl">
+      {preview && <PreviewBanner />}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <Eyebrow>Your office</Eyebrow>

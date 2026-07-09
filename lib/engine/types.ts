@@ -196,6 +196,9 @@ export interface ComplianceRecord {
   notes: string[];
   clarifications: Clarification[];
   createdAt: Timestamp;
+  /** Capability token for the read-only share/print report at /r/<token>.
+      Optional: additive to the v1 contract (migration 0003). */
+  shareToken?: string | null;
 }
 
 /* ------------------------------ ops + lifecycle --------------------------- */

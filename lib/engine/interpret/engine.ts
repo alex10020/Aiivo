@@ -12,7 +12,7 @@ import type {
   RecordItem,
   Requirement,
 } from "../types";
-import { hasAI, jsonComplete } from "../ai";
+import { engineEffort, hasAI, jsonComplete } from "../ai";
 import { jurisdictionById, permitTypeById, sourceById } from "../data/seed";
 
 const ORDER: Confidence[] = ["confirmed", "likely_required", "verify"];
@@ -187,7 +187,7 @@ export class ClaudeInterpretationEngine implements InterpretationEngine {
           .join("\n");
         const out = await jsonComplete<Enrich>({
           maxTokens: 12000,
-          effort: "high",
+          effort: engineEffort("high"),
           thinking: true,
           system:
             "You finalise a compliance record. You are given the EXACT permit set already matched from a verified database — do NOT add or rename permits. For each item write a one-sentence plain description and a short requirements checklist. In 'drop', list item ids that the owner's answers make inapplicable (e.g. employee-related filings if there are no employees; a Certificate of Occupancy for an existing same-use space). Write a one-line business summary, a short overall timeline range, and 2–4 concrete location-specific notes.",

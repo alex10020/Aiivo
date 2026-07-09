@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -28,6 +28,12 @@ export default function SignInPage() {
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+
+  // /signin?mode=signup opens straight onto account creation
+  useEffect(() => {
+    const m = new URLSearchParams(window.location.search).get("mode");
+    if (m === "signup" || m === "password") setMode(m);
+  }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

@@ -6,6 +6,15 @@ const MODEL = "claude-opus-4-8";
 
 export type Effort = "low" | "medium" | "high" | "xhigh" | "max";
 
+/* Deploy-time quality/latency dial. On Vercel Hobby (60s function cap) set
+   AIIVO_ENGINE_EFFORT=medium; on a paid plan leave unset for full depth. */
+export function engineEffort(fallback: Effort): Effort {
+  const e = process.env.AIIVO_ENGINE_EFFORT;
+  return e === "low" || e === "medium" || e === "high" || e === "xhigh" || e === "max"
+    ? e
+    : fallback;
+}
+
 export function hasAI(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);
 }

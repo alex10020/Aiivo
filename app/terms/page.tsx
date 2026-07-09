@@ -15,8 +15,8 @@ export const metadata: Metadata = {
    Record metadata. Hardcoded (not computed) so the page is deterministic and
    matches the "official record" voice. Bump VERSION + EFFECTIVE on each edit.
 --------------------------------------------------------------------------- */
-const EFFECTIVE = "June 27, 2026";
-const VERSION = "1.0";
+const EFFECTIVE = "July 9, 2026";
+const VERSION = "1.1";
 const RECORD_NO = "AIV-LEGAL-TOS-2026";
 const LEGAL_EMAIL = "alexander@aiivo.ai";
 
@@ -143,6 +143,29 @@ const SECTIONS: Section[] = [
           circumstances. You remain responsible for confirming requirements with
           the relevant authority before acting, and especially before relying on
           any item marked &ldquo;Likely Required&rdquo; or &ldquo;Verify.&rdquo;
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "ai-output",
+    title: "AI-assisted output",
+    body: (
+      <>
+        <p>
+          Aiivo uses artificial-intelligence systems to match your business
+          description against regulatory data, to generate report text, and to
+          answer clarifying questions. AI-generated output can contain errors,
+          omissions, or statements that are out of date, and two similar queries
+          may produce different results.
+        </p>
+        <p>
+          Where a report item carries a source link and a
+          &ldquo;last&nbsp;verified&rdquo; date, that refers to the underlying
+          government-source data — not to the AI-generated summary text around
+          it. Do not treat any AI-generated description as a substitute for the
+          issuing authority&rsquo;s own published requirements, which control in
+          the event of any difference.
         </p>
       </>
     ),

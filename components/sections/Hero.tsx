@@ -136,7 +136,7 @@ export function Hero() {
                 </div>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-seal/30 bg-seal/[0.07] px-2.5 py-1 font-mono text-[0.66rem] font-medium uppercase tracking-wider text-seal">
                   <span className="h-1.5 w-1.5 rounded-full bg-seal" />
-                  Compliant
+                  Record ready
                 </span>
               </div>
 

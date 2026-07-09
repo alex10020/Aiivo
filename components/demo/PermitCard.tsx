@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ExternalLink, ShieldCheck } from "lucide-react";
+import { ChevronDown, ExternalLink, PhoneCall, ShieldCheck } from "lucide-react";
 import { LEVELS, CONFIDENCE, type Permit } from "@/lib/permits";
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -150,6 +150,43 @@ export function PermitCard({ permit, index }: { permit: Permit; index: number })
                   Source: {permit.issuing_authority} · verified{" "}
                   {fmtDate(permit.last_verified)}
                 </p>
+              )}
+
+              {/* Non-confirmed items actively route the owner to the authority —
+                  the confidence tag is a legal boundary, not just a label. */}
+              {permit.confidence !== "confirmed" && (
+                <div
+                  className={`mt-4 flex gap-2.5 rounded-lg border p-3.5 ${
+                    permit.confidence === "verify"
+                      ? "border-stamp/30 bg-stamp/[0.05]"
+                      : "border-gold/35 bg-gold/[0.06]"
+                  }`}
+                >
+                  <PhoneCall
+                    className={`mt-0.5 h-4 w-4 shrink-0 ${
+                      permit.confidence === "verify" ? "text-stamp" : "text-gold"
+                    }`}
+                  />
+                  <p className="text-xs leading-relaxed text-ink-soft">
+                    {permit.confidence === "verify" ? (
+                      <>
+                        <strong className="text-ink">
+                          Confirm before relying on this item.
+                        </strong>{" "}
+                        Whether it applies depends on specifics of your business —
+                        contact {permit.issuing_authority} directly
+                        {permit.url ? " (link below)" : ""} before filing or
+                        deciding to skip it.
+                      </>
+                    ) : (
+                      <>
+                        <strong className="text-ink">Likely required.</strong>{" "}
+                        Applies in most cases like yours — confirm the details with{" "}
+                        {permit.issuing_authority} when you file.
+                      </>
+                    )}
+                  </p>
+                </div>
               )}
 
               {permit.url && (

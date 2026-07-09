@@ -4,8 +4,12 @@ import { AlertTriangle, ArrowLeft } from "lucide-react";
 import { ResultsSummary } from "@/components/demo/ResultsSummary";
 import { PermitCard } from "@/components/demo/PermitCard";
 import { FilingPanel } from "@/components/app/FilingPanel";
+import { ShareReport } from "@/components/app/ShareReport";
+import { ReportDisclaimer } from "@/components/ui/ReportDisclaimer";
 import { currentUser } from "@/lib/engine/session";
 import { getRecordOwned } from "@/lib/engine/store";
+import { previewEnabled, PREVIEW_RECORD } from "@/lib/engine/preview";
+import { PreviewBanner } from "@/components/app/PreviewBanner";
 import type { ComplianceRecord } from "@/lib/engine/types";
 import type { PermitResult } from "@/lib/permits";
 
@@ -42,15 +46,21 @@ export default async function RecordPage({
   params: Promise<{ id: string }>;
 }) {
   const user = await currentUser();
-  if (!user) redirect("/signin?next=/app");
+  const preview = !user && previewEnabled();
+  if (!user && !preview) redirect("/signin?next=/app");
   const { id } = await params;
-  const record = await getRecordOwned(id, user.id);
+  const record = preview
+    ? id === PREVIEW_RECORD.id
+      ? PREVIEW_RECORD
+      : null
+    : await getRecordOwned(id, user!.id);
   if (!record) notFound();
 
   const display = toDisplay(record);
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
+      {preview && <PreviewBanner />}
       <Link
         href="/app"
         className="label inline-flex items-center gap-2 transition-colors hover:text-ink"
@@ -85,6 +95,12 @@ export default async function RecordPage({
             ))}
           </ul>
         </div>
+      )}
+
+      <ReportDisclaimer />
+
+      {record.shareToken && (
+        <ShareReport recordId={record.id} shareToken={record.shareToken} />
       )}
 
       <FilingPanel recordId={record.id} items={record.items} />

@@ -46,12 +46,18 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <a
-              href="#"
+            <Link
+              href="/signin"
               className="hidden rounded-full px-3 py-2 text-sm text-ink-soft transition-colors hover:text-ink sm:block"
             >
               Sign in
-            </a>
+            </Link>
+            <Link
+              href="/signin?mode=signup"
+              className="hidden rounded-full border border-line px-3.5 py-2 text-sm text-ink transition-colors hover:border-line-strong lg:block"
+            >
+              Sign up
+            </Link>
             <Link
               href="/demo"
               className="group hidden items-center gap-1.5 rounded-full bg-seal px-4 py-2 text-sm font-medium text-on-seal transition-colors hover:bg-seal-bright sm:inline-flex"
@@ -82,6 +88,13 @@ export function Nav() {
               {l.label}
             </Link>
           ))}
+          <Link
+            href="/signin"
+            onClick={() => setOpen(false)}
+            className="block rounded-2xl px-3 py-3 text-sm text-ink-soft hover:bg-paper-2 hover:text-ink"
+          >
+            Sign in
+          </Link>
           <Link
             href="/demo"
             onClick={() => setOpen(false)}

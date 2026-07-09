@@ -2,15 +2,22 @@ import { redirect } from "next/navigation";
 import { Mail, ShieldCheck } from "lucide-react";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { currentUser } from "@/lib/engine/session";
+import { previewEnabled, PREVIEW_USER } from "@/lib/engine/preview";
+import { PreviewBanner } from "@/components/app/PreviewBanner";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
-  const user = await currentUser();
-  if (!user) redirect("/signin?next=/app/account");
+  const authed = await currentUser();
+  const preview = !authed && previewEnabled();
+  if (!authed && !preview) redirect("/signin?next=/app/account");
+  const user = authed
+    ? { email: authed.email, created_at: authed.created_at }
+    : { email: PREVIEW_USER.email, created_at: "2026-07-01T00:00:00Z" };
 
   return (
     <div className="mx-auto max-w-2xl">
+      {preview && <PreviewBanner />}
       <Eyebrow>Account</Eyebrow>
       <h1 className="mt-4 text-3xl leading-[1.08] tracking-tight text-ink sm:text-4xl">
         Your <span className="italic seal-text">registration</span>.

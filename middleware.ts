@@ -9,6 +9,11 @@ export async function middleware(req: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
+    // Dev-only dashboard preview: with no Supabase configured, `next dev`
+    // renders /app with sample data. Production builds still redirect.
+    if (process.env.NODE_ENV === "development") {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/signin", req.url));
   }
 

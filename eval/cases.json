@@ -46,5 +46,29 @@
     "input": { "business_type": "SaaS company", "location": "Austin, TX", "sells": "software subscriptions" },
     "expect": ["employer identification"],
     "forbid": ["retail food", "food protection manager"]
+  },
+  {
+    "name": "Coffee shop · Miami, FL (food licensed at STATE level by DBPR)",
+    "input": { "business_type": "Coffee shop", "location": "Miami, FL", "sells": "coffee and pastries" },
+    "expect": ["employer identification", "sales & use tax", "retail food", "dbpr"],
+    "forbid": ["miami-dade county retail food"]
+  },
+  {
+    "name": "Café · Seattle, WA (food at COUNTY: Public Health Seattle & King Co.)",
+    "input": { "business_type": "Cafe", "location": "Seattle, WA", "sells": "coffee, sandwiches" },
+    "expect": ["employer identification", "sales & use tax", "retail food", "king county", "business license"],
+    "forbid": []
+  },
+  {
+    "name": "Restaurant · Philadelphia, PA (home-rule city health dept)",
+    "input": { "business_type": "Restaurant", "location": "Philadelphia, PA", "sells": "cheesesteaks and sodas" },
+    "expect": ["employer identification", "sales & use tax", "retail food", "commercial activity"],
+    "forbid": []
+  },
+  {
+    "name": "Retail boutique · Las Vegas, NV (NV state business license)",
+    "input": { "business_type": "Clothing boutique", "location": "Las Vegas, NV", "sells": "apparel" },
+    "expect": ["employer identification", "sales & use tax", "state business license"],
+    "forbid": ["retail food"]
   }
 ]

@@ -32,6 +32,8 @@ export function ResultsSummary({ result }: { result: PermitResult }) {
   const total = result.permits.length;
   const agencies = new Set(result.permits.map((p) => p.issuing_authority)).size;
   const sourced = result.permits.some((p) => p.last_verified);
+  const confirmed = result.permits.filter((p) => p.confidence === "confirmed").length;
+  const toVerify = total - confirmed;
 
   const counts = ORDER.map(
     (lvl) => result.permits.filter((p) => p.level === lvl).length
@@ -57,7 +59,8 @@ export function ResultsSummary({ result }: { result: PermitResult }) {
         aria-hidden
       >
         <span className="absolute inset-[14%] rounded-full bg-card/80" />
-        <Seal className="relative h-full w-full" text="AIIVO · ON RECORD · COMPLIANT · " />
+        {/* Never stamp "COMPLIANT" — this is a research record, not a certification. */}
+        <Seal className="relative h-full w-full" text="AIIVO · COMPLIANCE RESEARCH RECORD · " />
       </motion.div>
 
       <div className="paper-grain relative p-6 sm:p-8">
@@ -79,9 +82,23 @@ export function ResultsSummary({ result }: { result: PermitResult }) {
         {sourced && (
           <p className="mt-2 flex items-center gap-1.5 pl-6 font-mono text-[0.66rem] text-faint">
             <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-seal" />
-            Sourced from {agencies} government {agencies === 1 ? "agency" : "agencies"} · every line verified within 90 days
+            Source data from {agencies} government {agencies === 1 ? "agency" : "agencies"} · reviewed within the last 90 days
           </p>
         )}
+
+        {/* honesty strip: how much of this record still needs the owner's action */}
+        <div className="mt-4 flex flex-wrap gap-2 pl-6">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-seal/30 bg-seal/[0.07] px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wider text-seal">
+            <span className="h-1.5 w-1.5 rounded-full bg-seal" />
+            {confirmed} confirmed
+          </span>
+          {toVerify > 0 && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/[0.08] px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wider text-gold">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+              {toVerify} to confirm with the authority
+            </span>
+          )}
+        </div>
 
         <div className="my-6 border-t border-dashed border-line" />
 
@@ -162,7 +179,7 @@ export function ResultsSummary({ result }: { result: PermitResult }) {
         {/* footer row */}
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="label text-faint">Verified</p>
+            <p className="label text-faint">Generated</p>
             <p className="mt-1 font-mono text-xs text-ink-soft">
               {now.toLocaleDateString("en-US", {
                 day: "2-digit",

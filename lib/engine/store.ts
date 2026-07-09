@@ -260,11 +260,36 @@ export async function listFilingsForItems(itemIds: string[]): Promise<Filing[]> 
   }
 }
 
+/** Public read: fetch a record by its share token (capability URL). */
+export async function getRecordByShareToken(
+  token: string
+): Promise<ComplianceRecord | null> {
+  if (!hasStore()) return null;
+  try {
+    const db = serverClient();
+    const { data: rec } = await db
+      .from("records")
+      .select("*")
+      .eq("share_token", token)
+      .maybeSingle();
+    if (!rec) return null;
+    const { data: items } = await db
+      .from("record_items")
+      .select("*")
+      .eq("record_id", rec.id);
+    return mapRecord(rec, items ?? []);
+  } catch (err) {
+    console.error("[aiivo] getRecordByShareToken failed:", err);
+    return null;
+  }
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function mapRecord(r: any, items: any[]): ComplianceRecord {
   return {
     id: r.id,
     businessId: r.business_id,
+    shareToken: r.share_token ?? null,
     status: r.status,
     tier: r.tier,
     summary: r.summary,

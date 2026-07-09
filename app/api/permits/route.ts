@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { engineEffort } from "@/lib/engine/ai";
 import { coerceResult, type PermitResult } from "@/lib/permits";
 
 export const runtime = "nodejs";
@@ -306,7 +307,7 @@ Return the full compliance permit map for this business.`;
       messages: [{ role: "user", content: userPrompt }],
       thinking: { type: "adaptive" },
       output_config: {
-        effort: "high",
+        effort: engineEffort("high"),
         format: { type: "json_schema", schema: SCHEMA },
       },
     });

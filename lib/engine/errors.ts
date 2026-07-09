@@ -48,11 +48,35 @@ export class UpstreamError extends EngineError {
   }
 }
 
-/** Convert any thrown value into a uniform { status, body } pair for a Response. */
+/** Convert any thrown value into a uniform { status, body } pair for a Response.
+    Also the central error-telemetry choke point: every server error is logged
+    as one structured JSON line, which Vercel's log pipeline (and any future
+    log drain / Sentry forwarder) can filter on `aiivo_error`. */
 export function toHttp(err: unknown): { status: number; body: ApiErrorBody } {
-  if (err instanceof EngineError) {
-    return { status: err.status, body: { error: { code: err.code, message: err.message } } };
-  }
-  const message = err instanceof Error ? err.message : "Internal error";
-  return { status: 500, body: { error: { code: "internal_error", message } } };
+  const out =
+    err instanceof EngineError
+      ? { status: err.status, body: { error: { code: err.code, message: err.message } } }
+      : {
+          status: 500,
+          body: {
+            error: {
+              code: "internal_error",
+              message: err instanceof Error ? err.message : "Internal error",
+            },
+          },
+        };
+
+  // 5xx = our fault → error; 4xx = caller's → warn (still visible, less noisy)
+  const line = JSON.stringify({
+    aiivo_error: true,
+    code: out.body.error.code,
+    status: out.status,
+    message: out.body.error.message,
+    stack: err instanceof Error && out.status >= 500 ? err.stack : undefined,
+    at: new Date().toISOString(),
+  });
+  if (out.status >= 500) console.error(line);
+  else console.warn(line);
+
+  return out;
 }
