@@ -22,17 +22,18 @@ type Mode = "magic" | "password" | "signup";
 export default function SignInPage() {
   const router = useRouter();
   const supabase = browserClient();
-  const [mode, setMode] = useState<Mode>("magic");
+  const [mode, setMode] = useState<Mode>("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  // /signin?mode=signup opens straight onto account creation
+  // /signin?mode=signup opens straight onto account creation;
+  // ?mode=magic offers the email-link method instead of password.
   useEffect(() => {
     const m = new URLSearchParams(window.location.search).get("mode");
-    if (m === "signup" || m === "password") setMode(m);
+    if (m === "signup" || m === "password" || m === "magic") setMode(m);
   }, []);
 
   async function submit(e: React.FormEvent) {
