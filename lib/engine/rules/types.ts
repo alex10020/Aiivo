@@ -35,6 +35,7 @@ export interface RequirementRow {
   renewal: string;
   filingUrl: string | null;
   baseConfidence: Confidence;
+  lastVerifiedAt: string;
   active: boolean;
 }
 
@@ -52,6 +53,7 @@ export interface RuleCatalog {
 export interface PermitRequirement {
   requirementId: string;
   permitTypeId: string;
+  permitSlug: string;
   name: string;
   authority: string;
   jurisdiction: Jurisdiction;
@@ -60,5 +62,6 @@ export interface PermitRequirement {
   renewal: string;
   filingUrl: string | null;
   confidence: Confidence;
+  lastVerifiedAt: string;
   dependsOn: string[];
 }

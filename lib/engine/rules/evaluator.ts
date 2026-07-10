@@ -73,6 +73,7 @@ export function evaluatePermits(
   return topoSort([...matched.values()], catalog.dependencies).map((r) => ({
     requirementId: r.id,
     permitTypeId: r.permitTypeId,
+    permitSlug: r.permitSlug,
     name: r.permitName,
     authority: r.authority,
     jurisdiction: jById.get(r.jurisdictionId)!,
@@ -81,6 +82,7 @@ export function evaluatePermits(
     renewal: r.renewal,
     filingUrl: r.filingUrl,
     confidence: r.baseConfidence,
+    lastVerifiedAt: r.lastVerifiedAt,
     dependsOn: catalog.dependencies
       .filter((e) => e.requirementId === r.id && matched.has(e.dependsOnRequirementId))
       .map((e) => e.dependsOnRequirementId),

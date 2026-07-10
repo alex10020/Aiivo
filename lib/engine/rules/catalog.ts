@@ -69,6 +69,7 @@ export function buildCatalog(): RuleCatalog {
       renewal: r.renewal,
       filingUrl: r.filingUrl,
       baseConfidence: r.baseConfidence,
+      lastVerifiedAt: r.lastVerifiedAt,
       active: r.active,
     };
   });
