@@ -9,6 +9,7 @@ import type {
 import { geocoder } from "../resolve/geocoder";
 import { classifier } from "../resolve/classifier";
 import { retriever } from "../data/retriever";
+import { ruleRetriever } from "../data/rule-retriever";
 import { engine } from "./engine";
 import { buildCatalog } from "../rules/catalog";
 import { evaluatePermits } from "../rules/evaluator";
@@ -24,7 +25,10 @@ export async function runLookup(
     classifier.classify(input),
   ]);
   const ctx = { resolution, classification, clarifications };
-  const requirements = await retriever.retrieve(ctx);
+  // AIIVO_RULES=1 serves from the deterministic engine; default = legacy retriever.
+  const active = process.env.AIIVO_RULES === "1" ? ruleRetriever : retriever;
+  const requirements = await active.retrieve(ctx);
+  // Shadow diff is meaningful while legacy is active (compares it to the engine).
   if (process.env.AIIVO_SHADOW) shadowDiff(ctx, requirements);
   const draft = await engine.buildRecord(input, ctx, requirements);
   return {

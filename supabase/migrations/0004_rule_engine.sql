@@ -59,13 +59,14 @@ create index if not exists req_active_jurisdiction_idx
 -- Idempotent — only rewrites rows still on the default 'always'.
 -- ---------------------------------------------------------------------------
 update requirements set condition = case
+  -- naics (food+retail industries) first: a food OR retail business ⇒ applies
+  when applies_to ? 'naics'
+    then '{"op":"or","nodes":[{"op":"fact","key":"serves_food"},{"op":"fact","key":"sells_taxable_goods"}]}'::jsonb
   when applies_to->'triggers' ? 'food'      then '{"op":"fact","key":"serves_food"}'::jsonb
   when applies_to->'triggers' ? 'employees' then '{"op":"gte","key":"employee_count","value":1}'::jsonb
   when applies_to->'triggers' ? 'signage'   then '{"op":"fact","key":"installs_signage"}'::jsonb
   when applies_to->'triggers' ? 'alcohol'   then '{"op":"fact","key":"serves_alcohol"}'::jsonb
   when applies_to->'triggers' ? 'retail'    then '{"op":"fact","key":"sells_taxable_goods"}'::jsonb
-  when applies_to ? 'naics'
-    then '{"op":"or","nodes":[{"op":"fact","key":"serves_food"},{"op":"fact","key":"sells_taxable_goods"}]}'::jsonb
   else '{"op":"always"}'::jsonb
 end
 where condition = '{"op":"always"}'::jsonb;
